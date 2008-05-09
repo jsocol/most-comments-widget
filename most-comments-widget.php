@@ -1,13 +1,30 @@
 <?php
 /**
  * Plugin Name: Most Comments Widget
- * Plugin URI: http://jamessocol.com/
+ * Plugin URI: http://jamessocol.com/projects/most-comments-widget.php
  * Description: Adds a widget that shows the posts with the most comments.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: James Socol
  * Author URI: http://jamessocol.com/
  */
 
+/*  Copyright 2008  James Socol  (email : me@jamessocol.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+ 
 function js_most_comments_widget ( $argv )
 {
     global $wpdb;
