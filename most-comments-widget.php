@@ -3,7 +3,7 @@
  * Plugin Name: Most Comments Widget
  * Plugin URI: http://jamessocol.com/projects/most-comments-widget.php
  * Description: Adds a widget that shows the posts with the most comments.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: James Socol
  * Author URI: http://jamessocol.com/
  */
@@ -24,13 +24,15 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
- 
+
+$js_mcw_domain = 'most-comments-widget';
+
 function js_most_comments_widget ( $argv )
 {
-    global $wpdb;
+    global $wpdb, $js_mcw_domain;
     extract($argv);
     $options = get_option('js_most_comments_widget');
-    $title = $options['title'] ? $options['title'] : 'Most Comments';
+    $title = $options['title'] ? $options['title'] : __('default_title',$js_mcw_domain);
     $count = ctype_digit($options['count']) ? $options['count'] : 5;
     $posts = $wpdb->get_results("SELECT ID, post_title, comment_count FROM $wpdb->posts ORDER BY comment_count DESC LIMIT $count;");
 
@@ -39,15 +41,12 @@ function js_most_comments_widget ( $argv )
         <?php echo $before_title.$title.$after_title; ?>
         <ul>
 <?php
-    foreach($posts as $post) {
-
-    $id = $post->ID;
-    $title = $post->post_title;
-    $count = $post->comment_count;
-
-    echo "\t\t\t".'<li><a href="' . get_permalink($id) . '">' . $title . '</a> (' . $count . ')</li>';
-
-    }
+	foreach($posts as $post) {
+		$id = $post->ID;
+		$title = $post->post_title;
+		$count = $post->comment_count;
+		echo '<li><a href="' . get_permalink($id) . '">' . $title . '</a> (' . $count . ')</li>';
+	}
 ?>
         </ul>
     <?php echo $after_widget; ?>
@@ -56,6 +55,8 @@ function js_most_comments_widget ( $argv )
 
 function js_most_comments_widget_control ()
 {
+	global $js_mcw_domain;
+	
     $options = $newoptions = get_option('js_most_comments_widget');
     if ( $_POST['most-comments-submit'] ) {
         $newoptions['title'] = strip_tags(stripslashes($_POST['most-comments-title']));
@@ -71,20 +72,24 @@ function js_most_comments_widget_control ()
     $title = $options['title'];
     $count = $options['count'];
 ?>
-        <p><label for="most-comments-title"><?php _e('Title:'); ?> <input type="text" style="width: 250px;" id="most-comments-title" name="most-comments-title" value="<?php echo $title; ?>" /></label></p>
-        <p><label for="most-comments-count">Number of posts to show: <input type="text" style="width: 30px;" id="most-comments-count" name="most-comments-count" value="<?php echo $count; ?>" /> (at most 15)</label></p>
-        <input type="hidden" id="most-comments-submit" name="most-comments-submit" value="1" />
+		<p><label for="most-comments-title"><?php _e('form_title',$js_mcw_domain); ?> <input type="text" id="most-comments-title" name="most-comments-title" value="<?php echo $title; ?>" /></label></p>
+		<p><label for="most-comments-count"><?php _e('form_posts'); ?><input type="text" id="most-comments-count" name="most-comments-count" value="<?php echo $count; ?>" size="3" /> <?php printf(__('form_max'),15); ?></label></p>
+		<input type="hidden" id="most-comments-submit" name="most-comments-submit" value="1" />
 <?php
 }
 
 function js_most_comments_widget_init ()
 {
-    if ( function_exists('register_sidebar_widget') ) {
-        register_sidebar_widget("Most Comments", "js_most_comments_widget");
-        register_widget_control("Most Comments", 'js_most_comments_widget_control');
+	global $js_mcw_domain;
+	$plugin_dir = basename(dirname(__FILE__));
+	load_plugin_textdomain($js_mcw_domain, 'wp-content/plugins/'.$plugin_dir.'/languages',$plugin_dir.'/languages');
+	if ( function_exists('wp_register_sidebar_widget') ) {
+		wp_register_sidebar_widget('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget', array('description'=>__('widget_description',$js_bsw_domain)), 'js_most_comments_widget');
+		wp_register_widget_control('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget_control', array('description'=>__('widget_description',$js_bsw_domain)));
+	} else if ( function_exists('register_sidebar_widget') ) {
+        register_sidebar_widget(__('widget_name',$js_mcw_domain), "js_most_comments_widget");
+        register_widget_control(__('widget_name',$js_mcw_domain), 'js_most_comments_widget_control');
     }
 }
 
 add_action('widgets_init', 'js_most_comments_widget_init');
-
-?>
