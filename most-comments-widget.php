@@ -73,7 +73,7 @@ function js_most_comments_widget_control ()
     $count = $options['count'];
 ?>
 		<p><label for="most-comments-title"><?php _e('form_title',$js_mcw_domain); ?> <input type="text" id="most-comments-title" name="most-comments-title" value="<?php echo $title; ?>" /></label></p>
-		<p><label for="most-comments-count"><?php _e('form_posts'); ?><input type="text" id="most-comments-count" name="most-comments-count" value="<?php echo $count; ?>" size="3" /> <?php printf(__('form_max'),15); ?></label></p>
+		<p><label for="most-comments-count"><?php _e('form_posts',$js_mcw_domain); ?> <input type="text" id="most-comments-count" name="most-comments-count" value="<?php echo $count; ?>" size="3" /> <?php printf(__('form_max',$js_mcw_domain),15); ?></label></p>
 		<input type="hidden" id="most-comments-submit" name="most-comments-submit" value="1" />
 <?php
 }
@@ -85,8 +85,8 @@ function js_most_comments_widget_init ()
 	load_plugin_textdomain($js_mcw_domain, 'wp-content/plugins/'.$plugin_dir.'/languages', $plugin_dir.'/languages');
 	
 	if ( function_exists('wp_register_sidebar_widget') ) {
-		wp_register_sidebar_widget('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget', array('description'=>__('widget_description',$js_bsw_domain)), 'js_most_comments_widget');
-		wp_register_widget_control('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget_control', array('description'=>__('widget_description',$js_bsw_domain)));
+		wp_register_sidebar_widget('most-comments-widget', __('widget_name',$js_mcw_domain), 'js_most_comments_widget', array('description'=>__('widget_description',$js_mcw_domain)), 'js_most_comments_widget');
+		wp_register_widget_control('most-comments-widget', __('widget_name',$js_mcw_domain), 'js_most_comments_widget_control', array('description'=>__('widget_description',$js_mcw_domain)));
 	} else if ( function_exists('register_sidebar_widget') ) {
         register_sidebar_widget(__('widget_name',$js_mcw_domain), "js_most_comments_widget");
         register_widget_control(__('widget_name',$js_mcw_domain), 'js_most_comments_widget_control');
