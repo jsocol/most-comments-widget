@@ -82,7 +82,8 @@ function js_most_comments_widget_init ()
 {
 	global $js_mcw_domain;
 	$plugin_dir = basename(dirname(__FILE__));
-	load_plugin_textdomain($js_mcw_domain, 'wp-content/plugins/'.$plugin_dir.'/languages',$plugin_dir.'/languages');
+	load_plugin_textdomain($js_mcw_domain, 'wp-content/plugins/'.$plugin_dir.'/languages', $plugin_dir.'/languages');
+	
 	if ( function_exists('wp_register_sidebar_widget') ) {
 		wp_register_sidebar_widget('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget', array('description'=>__('widget_description',$js_bsw_domain)), 'js_most_comments_widget');
 		wp_register_widget_control('most-comments-widget', __('widget_name',$js_bsw_domain), 'js_most_comments_widget_control', array('description'=>__('widget_description',$js_bsw_domain)));
